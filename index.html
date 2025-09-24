@@ -1,140 +1,61 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\froman\fcharset0 Times-Roman;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
-\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720\partightenfactor0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Login with Location Check</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { text-align: center; font-family: sans-serif; margin-top: 50px; }
+    code { background: #f0f0f0; padding: 2px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>QR Login Demo</h1>
+  <h2 id="message">Checking your location...</h2>
 
-\f0\fs29\fsmilli14667 \cf0 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 <!DOCTYPE html>
-\f1\fs24 \
+  <div id="tokenDiv"></div>
 
-\f0\fs29\fsmilli14667 <html>
-\f1\fs24 \
+  <script>
+    // Location check
+    const targetLat = 37.30389;
+    const targetLon = -121.80713;
+    const allowedRadius = 0.1; // km = 100 m
 
-\f0\fs29\fsmilli14667 <head>
-\f1\fs24 \
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(dLat/2)**2 +
+        Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
 
-\f0\fs29\fsmilli14667 \'a0\'a0<title>Location-Restricted QR</title>
-\f1\fs24 \
+    function showToken() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token') || '12345DEMO'; // demo token
+      document.getElementById('tokenDiv').innerHTML = `<p>Logged in with token: <code>${token}</code></p>`;
+    }
 
-\f0\fs29\fsmilli14667 \'a0\'a0<meta name="viewport" content="width=device-width, initial-scale=1.0">
-\f1\fs24 \
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+        const distance = getDistanceFromLatLonInKm(userLat, userLon, targetLat, targetLon);
 
-\f0\fs29\fsmilli14667 </head>
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 <body>
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0<h2 id="message">Checking your location...</h2>
-\f1\fs24 \
-\
-
-\f0\fs29\fsmilli14667 \'a0\'a0<script>
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0// Target location (San Jose coordinates you provided)
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const targetLat = 37.30389;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const targetLon = -121.80713;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const allowedRadius = 0.1; // 100 meters in km
-\f1\fs24 \
-\
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const R = 6371; // Radius of the earth in km
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const dLat = (lat2 - lat1) * Math.PI / 180;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const dLon = (lon2 - lon1) * Math.PI / 180;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const a =
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.sin(dLon / 2) * Math.sin(dLon / 2);
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0return R * c;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\}
-\f1\fs24 \
-\
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0if (navigator.geolocation) \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0navigator.geolocation.getCurrentPosition(function(position) \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const userLat = position.coords.latitude;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const userLon = position.coords.longitude;
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const distance = getDistanceFromLatLonInKm(userLat, userLon, targetLat, targetLon);
-\f1\fs24 \
-\
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0if (distance <= allowedRadius) \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Access Granted";
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\} else \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "You are not in the allowed location";
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\}, function(error) \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Unable to retrieve location.";
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\});
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\} else \{
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Geolocation is not supported by your browser.";
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\}
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 \'a0\'a0</script>
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 </body>
-\f1\fs24 \
-
-\f0\fs29\fsmilli14667 </html>}
+        if (distance <= allowedRadius) {
+          document.getElementById("message").innerText = "✅ Access Granted";
+          showToken();
+        } else {
+          document.getElementById("message").innerText = "❌ You are not in the allowed location";
+        }
+      }, function(error) {
+        document.getElementById("message").innerText = "Unable to retrieve location.";
+      });
+    } else {
+      document.getElementById("message").innerText = "Geolocation is not supported by your browser.";
+    }
+  </script>
+</body>
+</html>
