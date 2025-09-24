@@ -1,0 +1,140 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs29\fsmilli14667 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 <!DOCTYPE html>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 <html>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 <head>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0<title>Location-Restricted QR</title>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0<meta name="viewport" content="width=device-width, initial-scale=1.0">
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 </head>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 <body>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0<h2 id="message">Checking your location...</h2>
+\f1\fs24 \
+\
+
+\f0\fs29\fsmilli14667 \'a0\'a0<script>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0// Target location (San Jose coordinates you provided)
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const targetLat = 37.30389;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const targetLon = -121.80713;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0const allowedRadius = 0.1; // 100 meters in km
+\f1\fs24 \
+\
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const R = 6371; // Radius of the earth in km
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const dLat = (lat2 - lat1) * Math.PI / 180;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const dLon = (lon2 - lon1) * Math.PI / 180;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const a =
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0Math.sin(dLon / 2) * Math.sin(dLon / 2);
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0return R * c;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\}
+\f1\fs24 \
+\
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0if (navigator.geolocation) \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0navigator.geolocation.getCurrentPosition(function(position) \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const userLat = position.coords.latitude;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const userLon = position.coords.longitude;
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0const distance = getDistanceFromLatLonInKm(userLat, userLon, targetLat, targetLon);
+\f1\fs24 \
+\
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0if (distance <= allowedRadius) \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Access Granted";
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\} else \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "You are not in the allowed location";
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\}, function(error) \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Unable to retrieve location.";
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0\});
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\} else \{
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\'a0\'a0document.getElementById("message").innerText = "Geolocation is not supported by your browser.";
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0\'a0\'a0\}
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 \'a0\'a0</script>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 </body>
+\f1\fs24 \
+
+\f0\fs29\fsmilli14667 </html>}
